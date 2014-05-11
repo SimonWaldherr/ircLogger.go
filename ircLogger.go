@@ -45,7 +45,7 @@ func (bot *IRC) Connect() (conn net.Conn, err error) {
 
 func main() {
 	if len(os.Args) < 5 {
-		log.Fatal("this application needs 5 parameter to start\nExample: irc.freenode.net 6667 channel nickname sqlite\n")
+		log.Fatal("this application needs 5 parameter to start\nExample: irc.freenode.net 6667 channel nickname\n")
 	} else {
 		var msgstr []string
 		msgexp, _ := regexp.Compile(":([^!]+)!~([^\\s]+) ([^\\s]+) ([^\\s]+) :(.*)")
