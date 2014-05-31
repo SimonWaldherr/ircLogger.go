@@ -1,0 +1,48 @@
+#!/bin/sh
+# Start/stop the IRC logger.
+
+DESC="IRC logger"
+DNAME=$(date "+%F_%R")
+NAME=ircLogger
+SCRIPTNAME=/etc/init.d/$NAME
+SCRIPTURI=/application/go/ircLogger/$NAME
+SCRIPTRUN="$SCRIPTURI 23"
+LOGFILE=/var/log/$NAME.$DNAME.log
+
+start() {
+  if [ "$(pidof $NAME)" ]; then
+	echo 'Service already running' >&2
+	return 1
+  else
+	echo 'Starting service...' >&2
+  fi
+  local CMD="$SCRIPTRUN"
+  $CMD>>$LOGFILE &
+  echo 'Service started' >&2
+}
+
+stop() {
+  if [ "$(pidof $NAME)" ]; then
+	echo 'Stopping service...' >&2
+  else
+	echo 'Service not running' >&2
+	return 1
+  fi
+  kill -9 $(pidof $NAME)
+  echo 'Service stopped' >&2
+}
+
+case "$1" in
+start)   start
+		 ;;
+stop)    stop
+		 ;;
+restart) stop
+		 sleep 1
+		 start
+		 ;;
+*)       echo "Usage: $0 {start|stop|restart}"
+		 exit 2
+		 ;;
+esac
+exit 0
